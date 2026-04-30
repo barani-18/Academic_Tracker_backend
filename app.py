@@ -49,9 +49,17 @@ def create_app():
     app.register_blueprint(chat_bp, url_prefix='/api/chat')
 
     # ─── SYSTEM HEALTH ───
+    # ─── SYSTEM HEALTH ───
     @app.route('/health')
     def health_check():
         return {"status": "ok", "message": "LABIA API is running"}
+
+    # ─── HOME ROUTE (Fixes the "Not Found" error) ───
+    @app.route('/')
+    def home():
+        return {"message": "Welcome to the Academic Tracker API!"}
+
+    # ─── FACULTY RISK DETECTION ROUTES ───
 
     # ─── FACULTY RISK DETECTION ROUTES ───
     # HLD Module 04: Risk Detection Module 
