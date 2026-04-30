@@ -35,7 +35,7 @@ def create_app():
     jwt = JWTManager(app)
     
     # ─── BLUEPRINT REGISTRATION ───
-    # HLD Section 3.3: Decoupled Controller tier [cite: 57]
+    # HLD Section 3.3: Decoupled Controller tier
     from routes.auth import auth_bp
     from routes.admin import admin_bp
     from routes.faculty import faculty_bp
@@ -49,17 +49,14 @@ def create_app():
     app.register_blueprint(chat_bp, url_prefix='/api/chat')
 
     # ─── SYSTEM HEALTH ───
-    # ─── SYSTEM HEALTH ───
     @app.route('/health')
     def health_check():
         return {"status": "ok", "message": "LABIA API is running"}
 
-    # ─── HOME ROUTE (Fixes the "Not Found" error) ───
+    # ─── HOME ROUTE ───
     @app.route('/')
     def home():
         return {"message": "Welcome to the Academic Tracker API!"}
-
-    # ─── FACULTY RISK DETECTION ROUTES ───
 
     # ─── FACULTY RISK DETECTION ROUTES ───
     # HLD Module 04: Risk Detection Module 
@@ -67,7 +64,7 @@ def create_app():
     def analyze_submission():
         """
         Executes the sequential analytical pipeline:
-        Preprocessing -> NLP Analytics -> Risk Evaluation [cite: 46, 90]
+        Preprocessing -> NLP Analytics -> Risk Evaluation
         """
         data = request.json
         text = data.get('text', '')
@@ -77,7 +74,7 @@ def create_app():
             return jsonify({"error": "Missing text or student ID"}), 400
 
         try:
-            # 1. Access Data Layer for longitudinal baseline [cite: 68]
+            # 1. Access Data Layer for longitudinal baseline
             past_submissions = Submission.query.filter_by(student_id=student_id).all()
             past_texts = [s.text_content for s in past_submissions]
 
@@ -95,11 +92,10 @@ def create_app():
         except Exception as e:
             return jsonify({"error": str(e)}), 500
 
-        
     return app
 
 if __name__ == '__main__':
     app = create_app()
     # Use Render's dynamically assigned PORT, or fall back to 5000 for local dev
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port, debug=False) # Turn off debug for production!
+    app.run(host='0.0.0.0', port=port, debug=False)
